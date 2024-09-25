@@ -1,0 +1,120 @@
+{
+    "endpoint": "/order-service",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/order-service",
+            "host": [
+                "order:5001"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/order-service/swagger-ui.css",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/order-service/swagger-ui.css",
+            "host": [
+                "order:5001"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/order-service/swagger-ui-bundle.js",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/order-service/swagger-ui-bundle.js",
+            "host": [
+                "order:5001"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/order-service/swagger-ui-standalone-preset.js",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/order-service/swagger-ui-standalone-preset.js",
+            "host": [
+                "order:5001"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/order-service/swagger-ui-init.js",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/order-service/swagger-ui-init.js",
+            "host": [
+                "order:5001"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/order-service/favicon-32x32.png",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/order-service/favicon-32x32.png",
+            "host": [
+                "order:5001"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/order-service/favicon-16x16.png",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/order-service/favicon-16x16.png",
+            "host": [
+                "order:5001"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/orders",
+    "method": "POST",
+    "backend": [
+        {
+            "url_pattern": "/orders",
+            "host": [
+                "order:5001"
+            ],
+            "method": "POST",
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true
+                }
+            }
+        }
+    ]
+},
+{
+    "endpoint": "/orders",
+    "method": "GET",
+    "backend": [
+        {
+            "url_pattern": "/orders",
+            "host": [
+                "order:5001"
+            ],
+            "method": "GET",
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true
+                }
+            }
+        }
+    ]
+}

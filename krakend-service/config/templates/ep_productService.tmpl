@@ -1,0 +1,174 @@
+{
+    "endpoint": "/product-service",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/product-service",
+            "host": [
+                "product:5002"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/product-service/swagger-ui.css",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/product-service/swagger-ui.css",
+            "host": [
+                "product:5002"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/product-service/swagger-ui-bundle.js",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/product-service/swagger-ui-bundle.js",
+            "host": [
+                "product:5002"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/product-service/swagger-ui-standalone-preset.js",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/product-service/swagger-ui-standalone-preset.js",
+            "host": [
+                "product:5002"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/product-service/swagger-ui-init.js",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/product-service/swagger-ui-init.js",
+            "host": [
+                "product:5002"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/product-service/favicon-32x32.png",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/product-service/favicon-32x32.png",
+            "host": [
+                "product:5002"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/product-service/favicon-16x16.png",
+    "output_encoding": "no-op",
+    "backend": [
+        {
+            "url_pattern": "/api/product-service/favicon-16x16.png",
+            "host": [
+                "product:5002"
+            ]
+        }
+    ]
+},
+{
+    "endpoint": "/products",
+    "method": "POST",
+    "backend": [
+        {
+            "url_pattern": "/products",
+            "host": [
+                "product:5002"
+            ],
+            "method": "POST",
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true
+                }
+            }
+        }
+    ]
+},
+{
+    "endpoint": "/products",
+    "method": "GET",
+    "backend": [
+        {
+            "url_pattern": "/products",
+            "host": [
+                "product:5002"
+            ],
+            "method": "GET",
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true
+                }
+            }
+        }
+    ]
+},
+{
+    "endpoint": "/products/{id}",
+    "method": "GET",
+    "backend": [
+        {
+            "url_pattern": "/products/{id}",
+            "host": [
+                "product:5002"
+            ],
+            "method": "GET",
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true
+                }
+            }
+        }
+    ]
+},
+{
+    "endpoint": "/products/{id}",
+    "method": "PATCH",
+    "backend": [
+        {
+            "url_pattern": "/products/{id}",
+            "host": [
+                "product:5002"
+            ],
+            "method": "PATCH",
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true
+                }
+            }
+        }
+    ]
+},
+{
+    "endpoint": "/products/{id}",
+    "method": "DELETE",
+    "backend": [
+        {
+            "url_pattern": "/products/{id}",
+            "host": [
+                "product:5002"
+            ],
+            "method": "DELETE",
+            "extra_config": {
+                "backend/http": {
+                    "return_error_code": true
+                }
+            }
+        }
+    ]
+}

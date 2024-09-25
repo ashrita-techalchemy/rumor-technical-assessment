@@ -1,0 +1,75 @@
+version: "3"
+
+services:
+  postgresdb:
+    image: postgres:latest
+    container_name: postgresdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_DB: rumor
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+    command: postgres -c max_connections=200
+
+  grpc:
+    build:
+      context: ./nest-grpc-service
+    ports:
+      - "5000:5000"
+    command: ["pm2-runtime", "npm", "--", "run", "start"]
+
+  order:
+    build:
+      context: ./nest-order-service
+    ports:
+      - "5001:5001"
+    environment:
+      DB_HOST: postgresdb
+      DB_PORT: 5432
+      DB_NAME: rumor
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - postgresdb
+    command: ["pm2-runtime", "npm", "--", "run", "start"]
+
+  product:
+    build:
+      context: ./nest-product-service
+    ports:
+      - "5002:5002"
+    environment:
+      DB_HOST: postgresdb
+      DB_PORT: 5432
+      DB_NAME: rumor
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - postgresdb
+    command: ["pm2-runtime", "npm", "--", "run", "start"]
+
+  krakend:
+    build:
+      context: ./krakend-service
+    volumes:
+      - ./krakend-service:/etc/krakend
+    ports:
+      - "8080:8080"
+    environment:
+      - FC_ENABLE=1
+      - FC_PARTIALS=config/partials
+      - FC_SETTINGS=config/settings/dev
+      - FC_TEMPLATES=config/templates
+      - FC_OUT=out.json
+      - SERVICE_NAME=KrakenD API Gateway
+    depends_on:
+      - postgresdb
+      - order
+      - product
+    command: ["run", "-dc", "krakend.tmpl", ""]
+
+networks:
+  rumor-network:

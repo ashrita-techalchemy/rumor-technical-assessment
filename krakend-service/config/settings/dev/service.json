@@ -1,0 +1,23 @@
+{
+    "port": 8080,
+    "environment": "DEVELOPMENT",
+    "extra_config": {
+        "telemetry/logging": {
+            "level": "DEBUG",
+            "prefix": "[KRAKEND]",
+            "syslog": false,
+            "stdout": true
+        },
+        "security/cors": {
+            "allow_origins": [
+              "*"
+            ]
+        },
+        "router": {
+            "return_error_msg": true
+        }
+    },
+    "timeout": "90000ms",
+    "cache_ttl": "0s",
+    "output_encoding": "json"
+}

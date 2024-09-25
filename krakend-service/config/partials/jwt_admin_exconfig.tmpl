@@ -1,0 +1,23 @@
+"extra_config": {
+	"auth/validator": {
+		"alg": "HS256",
+		"audience": [
+			"http://api.callahan-marketplace.com"
+		],
+		"roles": [
+			"admin"
+		],
+		"jwk_local_path": "/etc/krakend/jwk.json",
+		"disable_jwk_security": true,
+		"propagate_claims": [
+			[
+				"sub",
+				"x-user"
+			],
+			[
+				"roles",
+				"x-role"
+			]
+		]
+	}
+}
