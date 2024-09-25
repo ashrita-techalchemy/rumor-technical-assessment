@@ -1,9 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Observable } from 'rxjs';
 import { Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { OrderDetails } from './entities/orderDetails.entity';
 import { AxiosClient } from 'src/axios/axiosClient';
+import { Product, ProductById } from './interfaces/product.interface';
+
+interface ProductService {
+    findOne(data: ProductById): Observable<Product>;
+  }
 
 /**
  * Service responsible for managing orders.
@@ -11,7 +18,9 @@ import { AxiosClient } from 'src/axios/axiosClient';
 @Injectable()
 export class OrderService extends AxiosClient {
     private axiosClient: AxiosClient;
+    private productService: ProductService;
     constructor(
+        @Inject('PRODUCT_PACKAGE') private readonly client: ClientGrpc,
         @InjectRepository(Order)
         private readonly orderRepository: Repository<Order>,
         @InjectRepository(OrderDetails)
@@ -21,12 +30,16 @@ export class OrderService extends AxiosClient {
         this.axiosClient = new AxiosClient();
     }
 
+    onModuleInit() {
+        this.productService = this.client.getService<ProductService>('ProductService');
+    }
+
     /**
      * Places an order with the provided data.
      * @param orderData - The data of the order to be placed.
      * @returns A promise resolving with the created order.
      */
-    async placeOrder(orderData): Promise<Order> {
+    async placeOrder(orderData) {
         console.log('orderData', orderData);
 
         const order = new Order();
@@ -34,27 +47,35 @@ export class OrderService extends AxiosClient {
 
         const productAvailabilityPromises = orderData.map(
             async ({ productId }) => {
-                const product = await this.getCall(`/products/${productId}`);
-                if (!product.success || product.data.quantity === 0) {
-                    await this.orderRepository.delete(savedOrder.id);
-                    throw new Error('Product not available or insufficient quantity');
-                }
+                const product = this.productService.findOne({ id: productId });
+                product.subscribe({
+                    next: (product: Product) => {
+                        console.log('Product:', product);  // This is where you handle the response
+                        Promise.all(productAvailabilityPromises);
+
+                        const orderDetailsEntities = orderData.map(
+                            ({ productId, quantity }) => {
+                                const orderDetails = new OrderDetails();
+                                orderDetails.order = savedOrder;
+                                orderDetails.productId = productId;
+                                orderDetails.quantity = quantity;
+                                return orderDetails;
+                            },
+                        );
+
+                        return this.orderDetailsRepository.save(orderDetailsEntities);
+                    },
+                    error: (err) => {
+                      console.error('Error:', err);  // Handle any error from the gRPC call
+                      return err;
+                    },
+                    complete: () => {
+                      console.log('gRPC call completed');
+                      return "gRPC call completed"
+                    },
+                });
             },
         );
-
-        await Promise.all(productAvailabilityPromises);
-
-        const orderDetailsEntities = orderData.map(
-            ({ productId, quantity }) => {
-                const orderDetails = new OrderDetails();
-                orderDetails.order = savedOrder;
-                orderDetails.productId = productId;
-                orderDetails.quantity = quantity;
-                return orderDetails;
-            },
-        );
-
-        return await this.orderDetailsRepository.save(orderDetailsEntities);
     }
 
     /**
@@ -76,10 +97,28 @@ export class OrderService extends AxiosClient {
         const productIds: number[] = orders.flatMap(order =>
             order.orderDetails.map(orderDetail => orderDetail.productId)
         );
-        const products = await this.getCall(`/products?ids=${productIds.join(",")}`);
+        // let products = await this.getCall(`/products?ids=${productIds.join(",")}`);
+        let products = [];
+        for (let index=0; index<productIds.length; index++) {
+            const product = await this.productService.findOne({ id: productIds[index] });
+            product.subscribe({
+                next: (product: Product) => {
+                  console.log('Product:', product);  // This is where you handle the response
+                  products.push(product)
+                },
+                error: (err) => {
+                  console.error('Error:', err);  // Handle any error from the gRPC call
+                  return err;
+                },
+                complete: () => {
+                  console.log('gRPC call completed');
+                  return "gRPC call completed"
+                },
+            });
+        }
 
         const productLookup = {};
-        products.data.forEach(product => {
+        products.forEach(product => {
             productLookup[product.id] = product;
         });
 

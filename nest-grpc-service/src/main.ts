@@ -13,11 +13,20 @@ import { grpcClientOptions } from './grpc-client.options';
  * - Logs the URL where the application is running.
  */
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    app.connectMicroservice<MicroserviceOptions>(grpcClientOptions);
-    await app.startAllMicroservices();
-    await app.listen(process.env.PORT);
-    console.log(`Application is running on: ${await app.getUrl()}`);
+
+    const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+        AppModule,
+        {
+          transport: Transport.GRPC,
+          options: {
+            package: 'product',
+            protoPath: path.join(__dirname, './proto/product.proto'),
+            url: '0.0.0.0:50051',
+          },
+        },
+      );
+    await app.listen();
+    // console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
 bootstrap();

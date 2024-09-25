@@ -9,7 +9,7 @@ export const grpcClientOptions: ClientOptions = {
     transport: Transport.GRPC,
     options: {
         package: 'product', // ['product', 'hero2']
-        protoPath: join(__dirname, './product/product.proto'), // ['./hero/hero.proto', './hero/hero2.proto']
+        protoPath: join(__dirname, './proto/product.proto'), // ['./hero/hero.proto', './hero/hero2.proto']
         // packageDefinition: (pkg, server) => {
         //     new ReflectionService(pkg).addToServer(server);
         // },

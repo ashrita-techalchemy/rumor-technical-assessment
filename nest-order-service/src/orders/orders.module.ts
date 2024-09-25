@@ -1,13 +1,29 @@
+import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 import { OrderService } from './orders.service';
 import { OrderController } from './orders.controller';
 import { Order } from './entities/order.entity';
 import { OrderDetails } from './entities/orderDetails.entity';
-import { HttpModule } from '@nestjs/axios';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Order, OrderDetails]), HttpModule],
+    imports: [
+        TypeOrmModule.forFeature([Order, OrderDetails]), 
+        HttpModule,
+        ClientsModule.register([
+            {
+              name: 'PRODUCT_PACKAGE',
+              transport: Transport.GRPC,
+              options: {
+                package: 'product',
+                protoPath: join(__dirname, '../proto/product.proto'), // Path to proto file
+                url: 'localhost:50051', // gRPC server URL (Product Service)
+              },
+            },
+        ]),
+    ],
     controllers: [OrderController],
     providers: [OrderService],
 })
