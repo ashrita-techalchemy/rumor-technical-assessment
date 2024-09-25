@@ -1,7 +1,6 @@
 import { Controller, Post, Get, Body, HttpStatus } from '@nestjs/common';
 import { OrderService } from './orders.service';
 import {
-    ApiBearerAuth,
     ApiBody,
     ApiOperation,
     ApiResponse,

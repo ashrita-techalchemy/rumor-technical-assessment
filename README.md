@@ -9,8 +9,6 @@ This include major 3 services:
 
 We have used Nodejs as server along with NestJs as the framework. We have used Postgres Database, GRPC for interservice communication along with Krakend as API gateway. This service can be ran standonlne via npm or via docker 
 
-#### [Demo Video](https://www.loom.com/share/9c01d827095a4aee868ec18ea722be79?sid=ad546de3-8382-4ef1-830d-36571f1633d7) 
-
 ### Technologies and Services Used
 
 - Node.js (19.6.x)

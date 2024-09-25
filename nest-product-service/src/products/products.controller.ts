@@ -10,7 +10,6 @@ import {
     Query,
 } from '@nestjs/common';
 import {
-    ApiBearerAuth,
     ApiBody,
     ApiOperation,
     ApiParam,
@@ -27,7 +26,6 @@ import { Product } from './entities/product.entity';
  * ProductController handles HTTP requests related to products.
  * It is decorated with authentication using @ApiBearerAuth and tagged with 'Products' using @ApiTags.
  */
-@ApiBearerAuth()
 @ApiTags('Products')
 @Controller('products')
 export class ProductController {
