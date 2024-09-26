@@ -11,7 +11,7 @@ message Product {
   string name = 2;
   string description = 3;
   double price = 4;
-  int32 availableQuantity = 5;
+  int32 quantity = 5;
 }
 
 message ProductById {

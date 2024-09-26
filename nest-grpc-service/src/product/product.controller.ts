@@ -2,12 +2,11 @@ import { Controller, Get, Inject, OnModuleInit, Param } from '@nestjs/common';
 import {
   ClientGrpc,
   GrpcMethod,
-  GrpcStreamMethod,
 } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { toArray } from 'rxjs/operators';
 import { ProductById } from '../interface/product-by-id.interface';
 import { Product } from '../interface/product.interface';
+import { GRPCProductService } from './product.service';
 
 // Interface defining the structure of the ProductService
 interface ProductService {
@@ -23,7 +22,10 @@ export class ProductController implements OnModuleInit {
   ];
   private productService: ProductService;
 
-  constructor(@Inject('PRODUCT_PACKAGE') private readonly client: ClientGrpc) { }
+  constructor(
+    @Inject('PRODUCT_PACKAGE') private readonly client: ClientGrpc,
+    private readonly grpcProductService: GRPCProductService
+  ) { }
 
   // Lifecycle hook to initialize the product service
   onModuleInit() {
@@ -46,7 +48,7 @@ export class ProductController implements OnModuleInit {
    * @returns The product with the specified ID.
    */
   @GrpcMethod('ProductService', 'getProduct')
-  getProduct(data: ProductById): Product {
-    return this.items.find(({ id }) => id === data.id);
+  async getProduct(data: ProductById): Promise<Product> {
+    return await this.grpcProductService.findOne(data.id);
   }
 }

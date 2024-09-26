@@ -99,11 +99,13 @@ export class OrderService extends AxiosClient {
         );
         // let products = await this.getCall(`/products?ids=${productIds.join(",")}`);
         let products = [];
+        let productLookup = {};
         for (let index=0; index<productIds.length; index++) {
             const product = await this.productService.getProduct({ id: productIds[index] });
             product.subscribe({
                 next: (product: Product) => {
                   console.log('Product:', product);  // This is where you handle the response
+                  productLookup[productIds[index]] = product
                   products.push(product)
                 },
                 error: (err) => {
@@ -112,15 +114,10 @@ export class OrderService extends AxiosClient {
                 },
                 complete: () => {
                   console.log('gRPC call completed');
-                  return "gRPC call completed"
+                //   return "gRPC call completed"
                 },
             });
         }
-
-        const productLookup = {};
-        products.forEach(product => {
-            productLookup[product.id] = product;
-        });
 
         // Iterate through orders and details
         orders.forEach(order => {
