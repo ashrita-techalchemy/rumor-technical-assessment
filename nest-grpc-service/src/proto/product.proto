@@ -3,11 +3,7 @@ syntax = "proto3";
 package product;
 
 service ProductService {
-  rpc CreateProduct (Product) returns (Product);
-  rpc GetProducts (Empty) returns (ProductList);
-  rpc findOne (ProductById) returns (Product);
-  rpc UpdateProduct (UpdateProductRequest) returns (Product);
-  rpc DeleteProduct (ProductById) returns (Empty);
+  rpc getProduct (ProductById) returns (Product);
 }
 
 message Product {
@@ -20,15 +16,6 @@ message Product {
 
 message ProductById {
   int32 id = 1;
-}
-
-message UpdateProductRequest {
-  int32 id = 1;
-  Product product = 2;
-}
-
-message ProductList {
-  repeated Product products = 1;
 }
 
 message Empty {}

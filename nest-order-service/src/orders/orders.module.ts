@@ -19,7 +19,7 @@ import { OrderDetails } from './entities/orderDetails.entity';
               options: {
                 package: 'product',
                 protoPath: join(__dirname, '../proto/product.proto'), // Path to proto file
-                url: 'localhost:50051', // gRPC server URL (Product Service)
+                url: process.env.PRODUCT_GRPC_URL, // gRPC server URL (GRPC Service)
               },
             },
         ]),

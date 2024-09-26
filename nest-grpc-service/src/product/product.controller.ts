@@ -45,8 +45,8 @@ export class ProductController implements OnModuleInit {
    * @param data Contains the ID of the product to find.
    * @returns The product with the specified ID.
    */
-  @GrpcMethod('ProductService', 'findOne')
-  findOne(data: ProductById): Product {
+  @GrpcMethod('ProductService', 'getProduct')
+  getProduct(data: ProductById): Product {
     return this.items.find(({ id }) => id === data.id);
   }
 }

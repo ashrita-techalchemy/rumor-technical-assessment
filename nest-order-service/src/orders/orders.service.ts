@@ -9,7 +9,7 @@ import { AxiosClient } from 'src/axios/axiosClient';
 import { Product, ProductById } from './interfaces/product.interface';
 
 interface ProductService {
-    findOne(data: ProductById): Observable<Product>;
+    getProduct(data: ProductById): Observable<Product>;
   }
 
 /**
@@ -47,7 +47,7 @@ export class OrderService extends AxiosClient {
 
         const productAvailabilityPromises = orderData.map(
             async ({ productId }) => {
-                const product = this.productService.findOne({ id: productId });
+                const product = this.productService.getProduct({ id: productId });
                 product.subscribe({
                     next: (product: Product) => {
                         console.log('Product:', product);  // This is where you handle the response
@@ -100,7 +100,7 @@ export class OrderService extends AxiosClient {
         // let products = await this.getCall(`/products?ids=${productIds.join(",")}`);
         let products = [];
         for (let index=0; index<productIds.length; index++) {
-            const product = await this.productService.findOne({ id: productIds[index] });
+            const product = await this.productService.getProduct({ id: productIds[index] });
             product.subscribe({
                 next: (product: Product) => {
                   console.log('Product:', product);  // This is where you handle the response

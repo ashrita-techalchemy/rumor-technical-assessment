@@ -14,6 +14,8 @@ import { grpcClientOptions } from './grpc-client.options';
  */
 async function bootstrap() {
 
+    const port = process.env.PORT || 5000;
+    const url = `0.0.0.0:${port}`;
     const app = await NestFactory.createMicroservice<MicroserviceOptions>(
         AppModule,
         {
@@ -21,12 +23,12 @@ async function bootstrap() {
           options: {
             package: 'product',
             protoPath: path.join(__dirname, './proto/product.proto'),
-            url: '0.0.0.0:50051',
+            url: url,
           },
         },
       );
     await app.listen();
-    // console.log(`Application is running on: ${await app.getUrl()}`);
+    console.log(`Application is running on: ${url}`);
 }
 
 bootstrap();
