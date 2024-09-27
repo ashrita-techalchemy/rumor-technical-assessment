@@ -26,7 +26,7 @@ We have used Nodejs as server along with NestJs as the framework. We have used P
 
 Add Initial sample.env variables. Rename the sample.env file in each service  folder to .env and add the following .env variables:
 
-- ``PORT={YOUR_SERVER_PORT}``
+- ``PORT={YOUR_NEST_APPLICATION_PORT}``
 - ``DB_HOST={YOUR_DB_HOST}``
 - ``DB_POST={YOUR_DB_PORT}``
 - ``DB_USERNAME={YOUR_DB_USERNAME}``
