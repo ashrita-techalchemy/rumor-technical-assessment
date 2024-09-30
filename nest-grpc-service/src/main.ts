@@ -1,8 +1,9 @@
 import * as path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 import { AppModule } from './app.module';
-import { grpcClientOptions } from './grpc-client.options';
 
 /**
  * Initializes and starts the NestJS application along with gRPC microservices.
@@ -14,21 +15,32 @@ import { grpcClientOptions } from './grpc-client.options';
  */
 async function bootstrap() {
 
-    const port = process.env.PORT || 5000;
+    const port = process.env.GRPC_PORT || 5003;
     const url = `0.0.0.0:${port}`;
-    const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-        AppModule,
+
+    const app = await NestFactory.create(AppModule);
+    app.connectMicroservice<MicroserviceOptions>(
         {
-          transport: Transport.GRPC,
-          options: {
-            package: 'product',
-            protoPath: path.join(__dirname, './proto/product.proto'),
-            url: url,
-          },
+            transport: Transport.GRPC,
+            options: {
+                package: 'product',
+                protoPath: path.join(__dirname, './proto/product.proto'),
+                url: url,
+            },
         },
-      );
-    await app.listen();
-    console.log(`Application is running on: ${url}`);
+    );
+    await app.startAllMicroservices();
+    const config = new DocumentBuilder()
+      .setTitle('GRPC Product API')
+      .setDescription('API for managing products')
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/grpc-product-service', app, document);
+
+    await app.listen(process.env.PORT);
+    console.log(`gRPC service is running on: ${url}`);
+    console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
 bootstrap();

@@ -2,10 +2,9 @@
 
 Welcome to the Rumor Technical Assessment documentation! 
 
-This include major 3 services:
-1. Product Service: Which allows you to create product, get all products and get, update & delete product by id.
+This include major 2 services:
+1. Grpc Product Service: Which allows you to create product, get all products and get, update & delete product by id and fast communucation between services.
 2. Order Service: Which allows you to place an order with multiple products at once & get the order details.
-3. Grpc Service: Which allows fast communucation between services.
 
 We have used Nodejs as server along with NestJs as the framework. We have used Postgres Database, GRPC for interservice communication along with Krakend as API gateway. This service can be ran standonlne via npm or via docker 
 
@@ -28,7 +27,7 @@ Add Initial sample.env variables. Rename the sample.env file in each service  fo
 
 - ``PORT={YOUR_NEST_APPLICATION_PORT}``
 - ``DB_HOST={YOUR_DB_HOST}``
-- ``DB_POST={YOUR_DB_PORT}``
+- ``DB_PORT={YOUR_DB_PORT}``
 - ``DB_USERNAME={YOUR_DB_USERNAME}``
 - ``DB_PASSWORD={YOUR_DB_PASSWORD}``
 - ``DB_NAME={YOUR_DB_NAME}``
@@ -75,9 +74,9 @@ $ docker-compose up -d or sudo docker-compose up -d
 ### Swagger URLs
 #### Order Service 
 ```bash
-$ http://localhost:8080/order-service
+$ http://localhost:8081/order-service
 ```
-#### Product Service
+#### Grpc Product Service
 ```bash
-$ http://localhost:8080/product-service
+$ http://localhost:8081/grpc-product-service
 ```

@@ -19,12 +19,17 @@ services:
       context: ./nest-grpc-service
     ports:
       - "5000:5000"
+      - "5003:5003"
     environment:
       DB_HOST: postgresdb
       DB_PORT: 5432
       DB_NAME: rumor
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
+      PORT: 5000
+      GRPC_PORT: 5003
+    depends_on:
+      - postgresdb
     command: ["pm2-runtime", "npm", "--", "run", "start"]
 
   order:
@@ -38,22 +43,7 @@ services:
       DB_NAME: rumor
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
-      PRODUCT_GRPC_URL: grpc:5000
-    depends_on:
-      - postgresdb
-    command: ["pm2-runtime", "npm", "--", "run", "start"]
-
-  product:
-    build:
-      context: ./nest-product-service
-    ports:
-      - "5002:5002"
-    environment:
-      DB_HOST: postgresdb
-      DB_PORT: 5432
-      DB_NAME: rumor
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
+      PRODUCT_GRPC_URL: grpc:5003
     depends_on:
       - postgresdb
     command: ["pm2-runtime", "npm", "--", "run", "start"]
@@ -64,7 +54,7 @@ services:
     volumes:
       - ./krakend-service:/etc/krakend
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       - FC_ENABLE=1
       - FC_PARTIALS=config/partials
@@ -75,7 +65,7 @@ services:
     depends_on:
       - postgresdb
       - order
-      - product
+      - grpc
     command: ["run", "-dc", "krakend.tmpl", ""]
 
 networks:
